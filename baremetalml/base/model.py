@@ -14,7 +14,8 @@ class BaseModel :
         return X, y
 
     def check_x(self, X):
-        X = np.array(X)
+        if X.ndim != 2:
+            raise ValueError("X must be 2D (samples x features)")
         return X
     
     
