@@ -1,4 +1,5 @@
 from base.model import BaseModel
+from base.transformer import BaseTransformer
 from linear.linear_regression import LinearRegression
 from linear.logistic_regression import LogisticRegression
 from neighbours.knn_classifier import KNNClassifier
@@ -11,6 +12,7 @@ from preprocessing.standard_scaler import StandardScaler
 
 __all__ = [
     "BaseModel",
+    "BaseTransformer",
     "LinearRegression",
     "LogisticRegression",
     "KNNClassifier",
