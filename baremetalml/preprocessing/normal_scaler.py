@@ -9,9 +9,11 @@ class NormalScaler(BaseTransformer):
     def transform(self, X):
         X = self.check_x(X)
         range_ = self.max - self.min
-        range_[range_ == 0] = 1           # avoid division by zero
-        X_norm = (X - self.min) / range_  # normalize
+        range_[range_ == 0] = 1           
+        X_norm = (X - self.min) / range_  
         return X_norm
+    
+
     
 
 
