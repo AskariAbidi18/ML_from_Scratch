@@ -9,8 +9,8 @@ class BaseModel :
     def check_x_y(self, X, y):
         X = np.array(X)
         y = np.array(y)
-        if X.shape != y.shape:
-            raise ValueError(f"X and y have incompatible shapes X : {X.shape()} vs y : {y.shape()}")
+        if X.shape[0] != y.shape[0]:
+            raise ValueError(f"X and y have incompatible shapes X : {X.shape} vs y : {y.shape}")
         return X, y
 
     def check_x(self, X):
