@@ -15,15 +15,9 @@ class LinearRegression(BaseModel):
         self.n_samples, self.n_features = X.shape
 
         if self.method == "normal_equation":
-            # Add bias column only if fit_intercept is True
-            if self.fit_intercept:
-                ones = np.ones((X.shape[0], 1))
-                X_modified = np.hstack((ones, X))
-            else:
-                X_modified = X
-
-            # Use pseudo-inverse instead of inv
-            self.weights = np.linalg.pinv(X_modified.T @ X_modified) @ X_modified.T @ y
+            ones = np.ones((X.shape[0], 1))        
+            X_modified = np.hstack((ones, X))   
+            self.weights = np.linalg.inv(X_modified.T @ X_modified) @ X_modified.T @ y  
 
             if self.fit_intercept:
                 self.bias = self.weights[0]
@@ -35,15 +29,16 @@ class LinearRegression(BaseModel):
             self.weights = np.zeros(self.n_features)
             self.bias = 0
             for _ in range(self.n_iterations):
-                predictions = X @ self.weights + self.bias
-                errors = predictions - y
+                self.predictions = X @ self.weights + self.bias
+                self.errors = self.predictions - y
 
-                # gradients
-                dw = (1 / self.n_samples) * X.T @ errors
-                db = (1 / self.n_samples) * np.sum(errors)
+                # Gradients calculation
+                self.dw = (1/self.n_samples) * X.T @ self.errors
+                self.db = (1/self.n_samples) * np.sum(self.errors)
 
-                self.weights -= self.learning_rate * dw
-                self.bias -= self.learning_rate * db
+                # Update weights and bias
+                self.weights -= self.learning_rate * self.dw
+                self.bias -= self.learning_rate * self.db
 
     def predict(self, X):
         X = self.check_x(X)

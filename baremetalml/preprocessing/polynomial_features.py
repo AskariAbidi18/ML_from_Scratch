@@ -5,23 +5,20 @@ from baremetalml import BaseTransformer
 class PolynomialFeatures(BaseTransformer):
     def __init__(self, degree=2, include_bias=True):
         self.degree = degree
-        self.include_bias = include_bias
+        self.include_bias = include_bias 
 
     def fit(self, X):
         X = self.check_x(X)
-        return self
+        return self 
 
     def transform(self, X):
-        X = np.array(X, dtype=float)  # ensure numeric
-        if X.ndim == 1:
-            X = X.reshape(-1, 1)
-
+        X = self.check_x(X)
         n_samples, n_features = X.shape
-        output = []
+        output = list()
 
         for sample in X:
-            row_features = []
-
+            row_features = list()
+            
             if self.include_bias:
                 row_features.append(1)
 
@@ -31,7 +28,6 @@ class PolynomialFeatures(BaseTransformer):
                     for index in combo:
                         prod *= sample[index]
                     row_features.append(prod)
-
+            
             output.append(row_features)
-
-        return np.array(output, dtype=float)
+        return np.array(output)
