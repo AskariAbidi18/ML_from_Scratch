@@ -1,5 +1,5 @@
 import numpy as np
-from baremetalml.base.model import BaseModel
+from baremetalml import BaseModel
 class LogisticRegression(BaseModel):
     def __init__(self):
         pass

@@ -1,5 +1,5 @@
 import numpy as np 
-from baremetalml.base.transformer import BaseTransformer
+from baremetalml import BaseTransformer
 class LabelEncoder(BaseTransformer):
     def fit(self,y):
         y = self.check_x(y)

@@ -1,22 +1,47 @@
-from baremetalml.base.model import BaseModel
-from baremetalml.base.transformer import BaseTransformer
-from baremetalml.linear.linear_regression import LinearRegression
-from baremetalml.linear.logistic_regression import LogisticRegression
-from baremetalml.neighbours.knn_classifier import KNNClassifier
-from baremetalml.neighbours.knn_regressor import KNNRegressor
-from baremetalml.preprocessing.label_encoder import LabelEncoder
-from baremetalml.preprocessing.one_hot_encoder import OneHotEncoder
-from baremetalml.preprocessing.normal_scaler import NormalScaler
-from baremetalml.preprocessing.standard_scaler import StandardScaler
-from baremetalml.preprocessing.polynomial_features import PolynomialFeatures
+# -----------------------------
+# Base classes
+# -----------------------------
+from .base.model import BaseModel
+from .base.transformer import BaseTransformer
 
+# -----------------------------
+# Linear models
+# -----------------------------
+from .linear import LinearRegression, LogisticRegression
+
+# -----------------------------
+# Neighbours (KNN)
+# -----------------------------
+from .neighbours import KNNClassifier, KNNRegressor
+
+# -----------------------------
+# Preprocessing
+# -----------------------------
+from .preprocessing import (
+    LabelEncoder,
+    OneHotEncoder,
+    NormalScaler,
+    StandardScaler,
+    PolynomialFeatures
+)
+
+# -----------------------------
+# Expose all in package level
+# -----------------------------
 __all__ = [
+    # Base
     "BaseModel",
     "BaseTransformer",
+    
+    # Linear models
     "LinearRegression",
     "LogisticRegression",
+    
+    # KNN
     "KNNClassifier",
     "KNNRegressor",
+    
+    # Preprocessing
     "LabelEncoder",
     "OneHotEncoder",
     "NormalScaler",

@@ -1,5 +1,5 @@
 import numpy as np
-from baremetalml.base.model import BaseModel
+from baremetalml import BaseModel
 class LinearRegression(BaseModel):
     def __init__(self,learning_rate=0.01, n_iterations=1000, method="gradient_descent", fit_intercept=True):
         self.learning_rate = learning_rate

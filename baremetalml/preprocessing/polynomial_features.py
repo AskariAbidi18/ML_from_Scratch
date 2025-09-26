@@ -1,6 +1,6 @@
 import numpy as np
 from itertools import combinations_with_replacement
-from baremetalml.base.transformer import BaseTransformer
+from baremetalml import BaseTransformer
 class PolynomialFeatures(BaseTransformer):
     def __init__(self, degree = 2, include_bias = True):
         self.degree = degree

@@ -1,5 +1,5 @@
 import numpy as np
-from baremetalml.base.transformer import BaseTransformer
+from baremetalml import BaseTransformer
 class StandardScaler(BaseTransformer):
     def fit(self, X):
         X = self.check_x(X)
