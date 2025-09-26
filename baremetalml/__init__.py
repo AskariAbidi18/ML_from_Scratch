@@ -8,6 +8,7 @@ from baremetalml.preprocessing.label_encoder import LabelEncoder
 from baremetalml.preprocessing.one_hot_encoder import OneHotEncoder
 from baremetalml.preprocessing.normal_scaler import NormalScaler
 from baremetalml.preprocessing.standard_scaler import StandardScaler
+from baremetalml.preprocessing.polynomial_features import PolynomialFeatures
 
 __all__ = [
     "BaseModel",
@@ -17,8 +18,8 @@ __all__ = [
     "KNNClassifier",
     "KNNRegressor",
     "LabelEncoder",
-    "MinMaxEncoder",
     "OneHotEncoder",
     "NormalScaler",
     "StandardScaler",
+    "PolynomialFeatures"
 ]
