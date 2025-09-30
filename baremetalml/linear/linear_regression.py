@@ -15,14 +15,11 @@ class LinearRegression(BaseModel):
         n_samples, n_features = X.shape
 
         if self.method == "normal_equation":
-            # Add bias column if intercept is requested
             X_mod = np.hstack((np.ones((n_samples, 1)), X)) if self.fit_intercept else X
 
-            # Tiny ridge regularization for numerical stability
             lambda_ = 1e-8
             theta = np.linalg.inv(X_mod.T @ X_mod + lambda_ * np.eye(X_mod.shape[1])) @ (X_mod.T @ y)
 
-            # Separate bias and weights
             if self.fit_intercept:
                 self.bias = theta[0]
                 self.weights = theta[1:]
