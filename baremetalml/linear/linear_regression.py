@@ -12,33 +12,40 @@ class LinearRegression(BaseModel):
 
     def fit(self, X, y):
         X, y = self.check_x_y(X, y)
-        self.n_samples, self.n_features = X.shape
+        n_samples, n_features = X.shape
 
         if self.method == "normal_equation":
-            ones = np.ones((X.shape[0], 1))        
-            X_modified = np.hstack((ones, X))   
-            self.weights = np.linalg.inv(X_modified.T @ X_modified) @ X_modified.T @ y  
+            # Add bias column if intercept is requested
+            X_mod = np.hstack((np.ones((n_samples, 1)), X)) if self.fit_intercept else X
 
+            # Tiny ridge regularization for numerical stability
+            lambda_ = 1e-8
+            theta = np.linalg.inv(X_mod.T @ X_mod + lambda_ * np.eye(X_mod.shape[1])) @ (X_mod.T @ y)
+
+            # Separate bias and weights
             if self.fit_intercept:
-                self.bias = self.weights[0]
-                self.weights = self.weights[1:]
+                self.bias = theta[0]
+                self.weights = theta[1:]
             else:
                 self.bias = 0
+                self.weights = theta
 
         elif self.method == "gradient_descent":
-            self.weights = np.zeros(self.n_features)
+            self.weights = np.zeros(n_features)
             self.bias = 0
+
             for _ in range(self.n_iterations):
-                self.predictions = X @ self.weights + self.bias
-                self.errors = self.predictions - y
+                y_pred = X @ self.weights + self.bias
+                errors = y_pred - y
 
-                # Gradients calculation
-                self.dw = (1/self.n_samples) * X.T @ self.errors
-                self.db = (1/self.n_samples) * np.sum(self.errors)
+                dw = (1 / n_samples) * (X.T @ errors)
+                db = (1 / n_samples) * np.sum(errors)
 
-                # Update weights and bias
-                self.weights -= self.learning_rate * self.dw
-                self.bias -= self.learning_rate * self.db
+                self.weights -= self.learning_rate * dw
+                self.bias -= self.learning_rate * db
+
+        else:
+            raise ValueError(f"Unknown method: {self.method}")
 
     def predict(self, X):
         X = self.check_x(X)
