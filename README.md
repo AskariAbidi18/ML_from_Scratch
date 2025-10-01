@@ -18,7 +18,7 @@ from baremetalml import LinearRegression, StandardScaler
 
 No need to know which file the class is defined in — everything is ready to use.
 
-# Core Models
+## Core Models
 
 **Linear Regression** – Ordinary Least Squares (Normal Equation) and Gradient Descent methods
 
@@ -26,7 +26,7 @@ No need to know which file the class is defined in — everything is ready to us
 
 **K-Nearest Neighbors (KNN)** – Classification and Regression with multiple distance metrics
 
-# Preprocessing & Transformers
+## Preprocessing & Transformers
 
 **StandardScaler** – Standardizes features to mean=0, standard deviation=1
 
@@ -38,13 +38,13 @@ No need to know which file the class is defined in — everything is ready to us
 
 **PolynomialFeatures** – Generates polynomial and interaction features up to a given degree
 
-# Base Classes
+## Base Classes
 
 **BaseModel** – Abstract base class for all models with input validation
 
 **BaseTransformer** – Abstract base class for all transformers with fit, transform, and fit_transform interface
 
-# What’s Inside
+## What’s Inside
 
 **BareMetalML includes**:
 
@@ -56,7 +56,7 @@ Feature engineering utilities like polynomial feature generation
 
 Modular structure for easy imports and extensibility
 
-# Installation
+## Installation
 
 BareMetalML is available on PyPI. Install it with:
 
@@ -69,11 +69,11 @@ Then import the modules you need:
 from baremetalml import LinearRegression, StandardScaler, KNNClassifier
 ```
 
-# Author 
+## Author 
 
 Askari Abidi
 
-# Contribute & Support
+## Contribute & Support
 
 BareMetalML is an open-source educational project.
 
