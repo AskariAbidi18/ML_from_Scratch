@@ -1,56 +1,50 @@
-# BareMetalML Implementation Guide
+BareMetalML Implementation Guide
+This document provides a deep dive into the mathematical foundations and practical implementation of BareMetalML components.
+It is intended for learning, experimentation, and educational purposes.
 
-This document provides a **deep dive** into the **mathematical foundations** and **practical implementation** of BareMetalML components.  
-It is intended for **learning, experimentation, and educational purposes**.
+All classes are modular, so you can import them directly:
 
-All classes are **modular**, so you can import them directly:
+Python
 
-```python
 from baremetalml import LinearRegression, StandardScaler, KNNClassifier
-```
+1. Base Classes
+1.1 BaseModel
+Purpose: Abstract class for all models with common interfaces and input validation.
 
-## 1. Base Classes
+Responsibilities:
 
-### 1.1 BaseModel
+fit(X, y) – Train the model
 
-**Purpose**: Abstract class for all models with common interfaces and input validation.
+predict(X) – Make predictions
 
-**Responsibilities**:
+Input validation: check_x_y and check_x
 
-*fit(X, y)* – Train the model
+Code Snippet:
 
-*predict(X)* – Make predictions
+Python
 
-**Input validation**: *check_x_y* and *check_x*
-
-**Code Snippet**:
-
-```python
 class BaseModel:
     def fit(self, X, y):
         raise NotImplementedError
     def predict(self, X):
         raise NotImplementedError
+Why it matters: Ensures consistency and reduces repetitive code across models.
 
-```
+1.2 BaseTransformer
+Purpose: Abstract class for all data transformers.
 
-**Why it matters**: Ensures consistency and reduces repetitive code across models.
+Methods:
 
-### 1.2 BaseTransformer
+fit(X) – Learn parameters from data
 
-**Purpose**: Abstract class for all data transformers.
+transform(X) – Apply transformation
 
-**Methods**:
+fit_transform(X) – Combines fit + transform
 
-*fit(X)* – Learn parameters from data
+Code Snippet:
 
-*transform(X)* – Apply transformation
+Python
 
-*fit_transform(X)* – Combines fit + transform
-
-**Code Snippet**:
-
-```python
 class BaseTransformer:
     def fit(self, X):
         raise NotImplementedError
@@ -59,327 +53,70 @@ class BaseTransformer:
     def fit_transform(self, X):
         self.fit(X)
         return self.transform(X)
-```
-
-## 2. Linear Regression
-
-### 2.1 Mathematical Formulation
-
-**Linear regression predicts**:
-
-y^​=Xβ+ϵ
-
-*Where*:
-
-𝑋
-∈
-𝑅
-𝑛
-×
-𝑑
-X∈R 
-n×d
-  = input matrix
-
-𝛽
-∈
-𝑅
-𝑑
-β∈R 
-d
-  = weights
-
-𝜖
-ϵ = error
-
-**Mean Squared Error (MSE)**:
-
-*MSE*
-=
-1
-𝑛
-∑
-𝑖
-=
-1
-𝑛
-(
-𝑦
-𝑖
-−
-𝑦
-^
-𝑖
-)
-2
-MSE= 
-n
-1
-​
-  
-i=1
-∑
-n
-​
- (y 
-i
-​
- − 
+2. Linear Regression
+2.1 Mathematical Formulation
+Linear regression predicts the output  
 y
 ^
 ​
-  
-i
-​
- ) 
-2
- 
-**Normal Equation (Analytical solution):**
+  as:
 
-𝛽
-^
-=
-(
-𝑋
-𝑇
-𝑋
-)
-−
-1
-𝑋
-𝑇
-𝑦
-β
-^
-​
- =(X 
-T
- X) 
-−1
- X 
-T
- y
-Gradient Descent (Iterative solution):
+$$\hat{y} = X\beta + \epsilon $$*Where*: * $X \in \mathbb{R}^{n \times d}$ = input matrix * $\beta \in \mathbb{R}^{d}$ = weights * $\epsilon$ = error **Mean Squared Error (MSE)**: The cost function to minimize. $$MSE = \frac{1}{n} \sum\_{i=1}^{n} (y\_i - \hat{y}\_i)^2 $$**Normal Equation (Analytical solution):** A direct formula to find the optimal weights. $$
+\hat{\beta} = (X^T X)^{-1} X^T y
+$$Gradient Descent (Iterative solution): An iterative approach to find the optimal weights.
 
-𝛽
-:
-=
-𝛽
-−
-𝛼
-1
-𝑛
-𝑋
-𝑇
-(
-𝑋
-𝛽
-−
-𝑦
-)
-β:=β−α 
-n
-1
-​
- X 
-T
- (Xβ−y)
-Where 
-𝛼
-α = learning rate.
+$$\beta := \beta - \alpha \frac{1}{n} X^T (X\beta - y)
+$$Where α = learning rate.
 
 2.2 Implementation in BareMetalML
-python
-Copy code
+Python
+
+from baremetalml import LinearRegression
+
 lr = LinearRegression(method="gradient_descent", learning_rate=0.01, n_iterations=1000)
 lr.fit(X, y)
 y_pred = lr.predict(X)
 Highlights:
 
-Supports Normal Equation & Gradient Descent
+Supports both Normal Equation & Gradient Descent.
 
-Automatically handles bias/intercept
+Automatically handles the bias/intercept term.
 
-Computes predictions as:
-
-𝑦
-^
-=
-𝑋
-⋅
-weights
-+
-bias
+Computes predictions as:  
 y
 ^
 ​
  =X⋅weights+bias
+
 3. Logistic Regression
 3.1 Mathematical Formulation
-Sigmoid function:
+Sigmoid function: Maps any real value into the range (0, 1), representing a probability.
 
-𝜎
-(
-𝑧
-)
-=
-1
-1
-+
-𝑒
-−
-𝑧
-σ(z)= 
-1+e 
-−z
- 
-1
-​
- 
-Prediction:
+$$\sigma(z) = \frac{1}{1 + e^{-z}} $$**Prediction**: The predicted probability is calculated by passing the linear model's output through the sigmoid function. $$\hat{y} = \sigma(X\beta) $$**Binary Cross-Entropy Loss**: The cost function for binary classification. $$
+L(\beta) = -\frac{1}{n} \sum_{i=1}^{n} [y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i)]
+$$Gradient Descent Updates: The weights are updated by taking steps in the direction opposite to the gradient of the loss function.
 
-𝑦
-^
-=
-𝜎
-(
-𝑋
-𝛽
-)
-y
-^
-​
- =σ(Xβ)
-Binary Cross-Entropy Loss:
+$$\beta := \beta - \alpha \frac{1}{n} X^T (\hat{y} - y)
+$$### 3.2 Implementation
 
-𝐿
-(
-𝛽
-)
-=
-−
-1
-𝑛
-∑
-𝑖
-=
-1
-𝑛
-[
-𝑦
-𝑖
-log
-⁡
-(
-𝑦
-^
-𝑖
-)
-+
-(
-1
-−
-𝑦
-𝑖
-)
-log
-⁡
-(
-1
-−
-𝑦
-^
-𝑖
-)
-]
-L(β)=− 
-n
-1
-​
-  
-i=1
-∑
-n
-​
- [y 
-i
-​
- log( 
-y
-^
-​
-  
-i
-​
- )+(1−y 
-i
-​
- )log(1− 
-y
-^
-​
-  
-i
-​
- )]
-Gradient Descent Updates:
+Python
 
-𝛽
-:
-=
-𝛽
-−
-𝛼
-1
-𝑛
-𝑋
-𝑇
-(
-𝑦
-^
-−
-𝑦
-)
-β:=β−α 
-n
-1
-​
- X 
-T
- ( 
-y
-^
-​
- −y)
-3.2 Implementation
-python
-Copy code
+from baremetalml import LogisticRegression
+
 logr = LogisticRegression(n_iterations=1000, learning_rate=0.01)
 logr.fit(X, y)
 y_pred = logr.predict(X)
-Computes probabilities using sigmoid
+Computes probabilities using the sigmoid function.
 
-Updates weights via gradient of cross-entropy loss
+Updates weights via the gradient of the cross-entropy loss.
 
-Predicts 0/1 based on 0.5 threshold
+Predicts class 0 or 1 based on a 0.5 probability threshold.
 
 4. K-Nearest Neighbors (KNN)
 4.1 Mathematical Formulation
 Distance Metrics:
 
-Euclidean: 
-𝑑
-=
-∑
-(
-𝑥
-𝑖
-−
-𝑥
-𝑗
-)
-2
-d= 
+Euclidean: d= 
 ∑(x 
 i
 ​
@@ -389,21 +126,11 @@ j
  ) 
 2
  
+
 ​
  
 
-Manhattan: 
-𝑑
-=
-∑
-∣
-𝑥
-𝑖
-−
-𝑥
-𝑗
-∣
-d=∑∣x 
+Manhattan: d=∑∣x 
 i
 ​
  −x 
@@ -411,24 +138,7 @@ j
 ​
  ∣
 
-Minkowski: 
-𝑑
-=
-(
-∑
-∣
-𝑥
-𝑖
-−
-𝑥
-𝑗
-∣
-𝑝
-)
-1
-/
-𝑝
-d=(∑∣x 
+Minkowski: d=(∑∣x 
 i
 ​
  −x 
@@ -442,232 +152,33 @@ p
 
 Prediction Rules:
 
-Classification: majority vote of k nearest neighbors
+Classification: Majority vote of the k nearest neighbors.
 
-Regression: mean of k nearest neighbors
+Regression: Mean of the k nearest neighbors.
 
 4.2 Implementation
-python
-Copy code
+Python
+
+from baremetalml import KNNClassifier
+
 knn = KNNClassifier(n_neighbors=5)
 knn.fit(X_train, y_train)
 y_pred = knn.predict(X_test)
 Pipeline Illustration:
 
-rust
-Copy code
-X_test -> compute distances -> select k nearest neighbors -> predict majority class
+X_test -> Compute distances -> Select k nearest neighbors -> Predict majority class
 5. Transformers
 5.1 StandardScaler
+Standardizes features by removing the mean and scaling to unit variance.
+
 Equation:
 
-𝑋
-𝑠
-𝑐
-𝑎
-𝑙
-𝑒
-𝑑
-=
-𝑋
-−
-𝜇
-𝜎
-X 
-scaled
-​
- = 
-σ
-X−μ
-​
- 
-5.2 NormalScaler
-Equation:
+$$X_{scaled} = \frac{X - \mu}{\sigma} $$### 5.2 NormalScaler Scales features to a given range, typically [0, 1]. **Equation**: $$X\_{norm} = \frac{X - X\_{min}}{X\_{max} - X\_{min}} $$\#\#\# 5.3 LabelEncoder Maps categorical labels to integer values. *Example*: `{'cat':0, 'dog':1, 'bird':2}` ### 5.4 OneHotEncoder Converts categorical integer features into one-hot encoded vectors. *Example*: $$
+['red', 'blue'] \rightarrow \begin{bmatrix} 1 & 0 \ 0 & 1 \end{bmatrix}
+$$### 5.5 PolynomialFeatures
 
-𝑋
-𝑛
-𝑜
-𝑟
-𝑚
-=
-𝑋
-−
-𝑋
-𝑚
-𝑖
-𝑛
-𝑋
-𝑚
-𝑎
-𝑥
-−
-𝑋
-𝑚
-𝑖
-𝑛
-X 
-norm
-​
- = 
-X 
-max
-​
- −X 
-min
-​
- 
-X−X 
-min
-​
- 
-​
- 
-5.3 LabelEncoder
-Maps categorical labels to integers.
-Example: {'cat':0, 'dog':1, 'bird':2}
+Generates polynomial and interaction features. For degree d=2:
 
-5.4 OneHotEncoder
-Converts categories to one-hot vectors.
-Example:
+$$(x_1, x_2) \rightarrow (1, x_1, x_2, x_1^2, x_1 x_2, x_2^2)
 
-[
-′
-𝑟
-𝑒
-𝑑
-′
-,
-′
-𝑏
-𝑙
-𝑢
-𝑒
-′
-]
-→
-[
-1
-0
-0
-1
-]
-[ 
-′
- red 
-′
- , 
-′
- blue 
-′
- ]→[ 
-1
-0
-​
-  
-0
-1
-​
- ]
-5.5 PolynomialFeatures
-Generates all polynomial combinations up to degree 
-𝑑
-d:
-
-(
-𝑥
-1
-,
-𝑥
-2
-)
-→
-(
-1
-,
-𝑥
-1
-,
-𝑥
-2
-,
-𝑥
-1
-2
-,
-𝑥
-1
-𝑥
-2
-,
-𝑥
-2
-2
-)
-(x 
-1
-​
- ,x 
-2
-​
- )→(1,x 
-1
-​
- ,x 
-2
-​
- ,x 
-1
-2
-​
- ,x 
-1
-​
- x 
-2
-​
- ,x 
-2
-2
-​
- )
-python
-Copy code
-poly = PolynomialFeatures(degree=2, include_bias=True)
-X_poly = poly.fit_transform(X)
-6. Example Pipeline
-python
-Copy code
-from baremetalml import StandardScaler, PolynomialFeatures, LinearRegression
-import numpy as np
-
-X = np.array([[1,2],[2,3],[3,4]])
-y = np.array([3,5,7])
-
-# Step 1: Standardize
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Step 2: Polynomial features
-poly = PolynomialFeatures(degree=2, include_bias=True)
-X_poly = poly.fit_transform(X_scaled)
-
-# Step 3: Linear Regression
-lr = LinearRegression(method='normal_equation')
-lr.fit(X_poly, y)
-y_pred = lr.predict(X_poly)
-print("Predictions:", y_pred)
-Pipeline Overview:
-
-rust
-Copy code
-Raw Data -> Scaling -> Polynomial Feature Expansion -> Linear Regression -> Predictions
-Notes
-All models and transformers are pure NumPy, easy to inspect and extend
-
-Designed for learning, experimentation, and building pipelines from scratch
-
-Modular imports make it simple to use any component:
-
-python
-Copy code
-from baremetalml import LinearRegression, StandardScaler, KNNClassifier
+$$ ```python from baremetalml import PolynomialFeatures poly = PolynomialFeatures(degree=2, include_bias=True) X_poly = poly.fit_transform(X) ``` ## 6\. Example Pipeline ```python from baremetalml import StandardScaler, PolynomialFeatures, LinearRegression import numpy as np # Sample Data X = np.array([[1,2],[2,3],[3,4]]) y = np.array([3,5,7]) # Step 1: Standardize features scaler = StandardScaler() X_scaled = scaler.fit_transform(X) # Step 2: Generate polynomial features poly = PolynomialFeatures(degree=2, include_bias=True) X_poly = poly.fit_transform(X_scaled) # Step 3: Train a Linear Regression model lr = LinearRegression(method='normal_equation') lr.fit(X_poly, y) # Step 4: Make predictions y_pred = lr.predict(X_poly) print("Predictions:", y_pred) ``` **Pipeline Overview**: ``` Raw Data -> Scaling -> Polynomial Feature Expansion -> Linear Regression -> Predictions ``` ## Notes * All models and transformers are built with pure **NumPy**, making them easy to inspect and extend. * This library is designed for **learning, experimentation, and building pipelines from scratch**. * Modular imports make it simple to use any component.$$
