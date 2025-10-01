@@ -14,59 +14,69 @@ For example, you can import any model or transformer like this:
 
 ```python
 from baremetalml import LinearRegression, StandardScaler
+```
 
 No need to know which file the class is defined in — everything is ready to use.
 
-Core Models
-Linear Regression – Ordinary Least Squares (Normal Equation) and Gradient Descent methods.
+# Core Models
 
-Logistic Regression – Binary classification with Gradient Descent optimization.
+**Linear Regression** – Ordinary Least Squares (Normal Equation) and Gradient Descent methods
 
-K-Nearest Neighbors (KNN) – Classification and Regression with multiple distance metrics.
+**Logistic Regression** – Binary classification with Gradient Descent optimization
 
-Preprocessing and Transformers
-StandardScaler – Standardizes features to mean=0, standard deviation=1.
+**K-Nearest Neighbors (KNN)** – Classification and Regression with multiple distance metrics
 
-NormalScaler – Min-max scaling to [0,1].
+# Preprocessing & Transformers
 
-LabelEncoder – Converts categorical labels to integers.
+**StandardScaler** – Standardizes features to mean=0, standard deviation=1
 
-OneHotEncoder – Converts categorical features into one-hot encoded vectors.
+**NormalScaler** – Min-max scaling to [0,1]
 
-PolynomialFeatures – Generates polynomial and interaction features up to a given degree.
+**LabelEncoder** – Converts categorical labels to integers
 
-Base Classes
-BaseModel – Abstract base class for all models with input validation.
+**OneHotEncoder** – Converts categorical features into one-hot encoded vectors
 
-BaseTransformer – Abstract base class for all transformers with fit, transform, and fit_transform interface.
+**PolynomialFeatures** – Generates polynomial and interaction features up to a given degree
 
-What’s Inside
-BareMetalML includes:
+# Base Classes
 
-All basic regression and classification models you need to start learning ML from scratch.
+**BaseModel** – Abstract base class for all models with input validation
 
-Preprocessing tools for handling both numerical and categorical data.
+**BaseTransformer** – Abstract base class for all transformers with fit, transform, and fit_transform interface
 
-Feature engineering utilities like polynomial feature generation.
+# What’s Inside
 
-Modular structure for easy imports and extensibility.
+**BareMetalML includes**:
 
-Installation
+All basic regression and classification models to start learning ML from scratch
+
+Preprocessing tools for handling numerical and categorical data
+
+Feature engineering utilities like polynomial feature generation
+
+Modular structure for easy imports and extensibility
+
+# Installation
+
 BareMetalML is available on PyPI. Install it with:
 
-bash
-Copy code
+```bash
 pip install baremetalml
+```
 Then import the modules you need:
 
-python
-Copy code
+```python
 from baremetalml import LinearRegression, StandardScaler, KNNClassifier
-Author
+```
+
+# Author 
+
 Askari Abidi
 
-Contribute & Support
+# Contribute & Support
+
 BareMetalML is an open-source educational project.
+
 Feel free to contribute, suggest improvements, or report issues on the repository.
 
 If you find it useful, you can support the project via donations or by sharing it with others.
