@@ -67,17 +67,7 @@ class BaseTransformer:
 
 **Linear regression predicts**:
 
-𝑦
-^
-=
-𝑋
-𝛽
-+  
-𝜖
-y
-^
-​
- =Xβ+ϵ
+y^​=Xβ+ϵ
 
 *Where*:
 
