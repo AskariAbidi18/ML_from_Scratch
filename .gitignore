@@ -7,7 +7,15 @@ __pycache__/
 build/
 dist/
 *.egg-info/
-.eggs/
+*.egg
+*.whl
+*.tar.gz
+*.dist-info/
+*.egg-info/
+
+# PyPI / packaging metadata
+pyproject.toml
+setup.cfg
 
 # Editable installs
 *.egg
@@ -23,5 +31,5 @@ Thumbs.db
 # Logs
 *.log
 
-#Test Files
+# Test Files
 test.py
