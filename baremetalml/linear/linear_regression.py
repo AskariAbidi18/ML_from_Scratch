@@ -47,6 +47,6 @@ class LinearRegression(BaseModel):
     def predict(self, X):
         X = self.check_x(X)
         return X @ self.weights + self.bias
-
+        
     def compute_loss(self, y_true, y_pred):
         return np.mean((y_true - y_pred) ** 2)
