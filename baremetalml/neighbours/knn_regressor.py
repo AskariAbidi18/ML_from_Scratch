@@ -8,11 +8,14 @@ class KNNRegressor(BaseModel):
 
     def fit(self, X, y):
         X, y = self.check_x_y(X, y)
+        self.X_train = X.astype(float)   # ensure features are floats
+        self.y_train = y.astype(float)
+        X, y = self.check_x_y(X, y)
         self.X_train = X
         self.y_train = y
 
     def predict(self, X):
-        X = self.check_x(X)
+        X = self.check_x(X).astype(float)
         predictions = []
 
         for x in X:
