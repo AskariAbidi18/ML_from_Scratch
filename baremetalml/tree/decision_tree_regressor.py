@@ -1,3 +1,3 @@
 from baremetalml.base import BaseModel
-class DecisionTreeClassifier(BaseModel):
+class DecisionTreeRegressor(BaseModel):
     pass
